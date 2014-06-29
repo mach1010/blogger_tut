@@ -4,6 +4,12 @@
 	<% @article.tags.each do |tag| %>
 	 <%= link_to tag.name, tag_path(tag) %>
 	<% end %>
+</p><br>
+
+<p>
+	<% if @article.image.exists? %>
+	<%= image_tag @article.image.url, style: "border-style: solid; border-width: 2px;" %>
+  <% end %>
 </p>
 
 <p><%= @article.body %></p>
