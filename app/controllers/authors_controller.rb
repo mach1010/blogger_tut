@@ -1,5 +1,7 @@
 class AuthorsController < ApplicationController
   before_action :set_author, only: [:show, :edit, :update, :destroy]
+  before_filter :zero_authors_or_authenticated, only: [:new, :create]
+  before_filter :require_login, except: [:new, :create]
 
   # GET /authors
   # GET /authors.json
@@ -60,6 +62,8 @@ class AuthorsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -70,5 +74,12 @@ class AuthorsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def author_params
       params.require(:author).permit(:username, :email, :password, :password_confirmation)
+    end
+    
+    def zero_authors_or_authenticated
+      unless Author.count == 0 || current_user
+        redirect_to root_path
+        return false
+      end
     end
 end
